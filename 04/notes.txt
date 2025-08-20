@@ -1,0 +1,61 @@
+Memory heirarchy: closer to CPU is faster, more expensive
+* Register, cache, main, disk
+
+* ADD R1, R2
+* ADD R1, M[200]
+* ADD R1, @A    Adds R1 to memory addressed by A
+* ADD 73, R1
+
+IO: memeory mapping
+* M[100] stores last key pressed
+* Drivers must handle this
+
+Flow Control (program counter)
+* Jump 100
+* Conditional jump: JGT (Jump Greater Than)
+
+* Program in ROM, reset, program starts
+* Registers: (D)ata, (A)ddress, (M)emory addressed by A aka RAM register
+
+A-instruction: @21
+* A = 21
+* RAM[21] is selected RAM register (M = RAM[21])
+
+C-instruction: dest = comp; jump
+* @56        // A = 56
+* D-1; JEQ   // if (D-1 == 0): jump to instruction in ROM[56]
+
+
+symbolic -assembler-> binary -> cpu
+
+A-instruction: @val
+* val in [0, 2^15 -1], 15 bits
+* 0val  (opcode 0)
+* 0|000 0000 0001 0101 = @21
+
+C-instruction
+* dest = comp; jump
+* (opcode) 1 | (unused) 11 | (comp) a c1 c2 c3 c4 c5 c6 | (dest) d1 d2 d3 | (jump) j1 j2 j3
+* comp: which expr to do, a=0 uses A or D, a=1 uses M
+* dest: null or combinations of AMD
+* jump: null or compares comp to 0 using >, >=, ...
+
+
+Screen memory map
+* 256x512 display (b/w)
+* 2^8 * 2^9 = 2^17 pixels = 131,072
+* 16-bit words, so 2^17 / 2^4 = 2^13 registers = 8192
+
+Finding bit for pixel(row,col):
+* word = ((row*512) + col) / 16 = (row*32) + col/16
+* bit = ((row*512) + col) % 16 = col%16
+
+
+Keyboard memory map: 16 bits
+
+
+Virtual registers: R0 = 0; R1 = 1 ...
+* use @5 for value A = 5; @R5 to select register 5
+
+SCREEN = 16384, KBD = 24576 (mmap offsets)
+
