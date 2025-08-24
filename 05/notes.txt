@@ -1,0 +1,40 @@
+CPU: ALU and Registers
+Memory: Data and Program
+
+Buses: Data, Address, Control
+
+data + control -ALU-> data + control (jump)
+data -Registers-> data + address (A -> M register)
+
+data + address -Data Memory-> data
+address -Program Memory -> data + control
+
+fetch execute cycle
+* fetch: load next instruction address into program counter
+  * program counter -instruction address-> program memory -> instruction
+* execute: op defined by instruction control bits, also uses data and registers
+* mux instruction address (fetch) and data address (execute) to address register using fetch/execute bit
+
+inM_16 (data in) + instruction_16 + reset_1 -cpu-> [outM_16 (data out), writeM_1 (write data?), addressM] + pc_15 (next instruction address)
+
+instruction-handling
+* A-instruction: 0 (op code) | 000101110111001 = @3001 = load 3001 into A register
+* A_register = Mux16(instruction, prevA_fromALUOut, sel=op_code)
+* C-instruction: 1 (op code), not muxed
+
+ALU
+* inputs: D-register value, Mux16(A-register value, inM=M-register value, sel=useM)
+* outputs: write to D-register?, mux with A-register, output/write M
+* control outputs: used for jump
+* computer is loaded with program, pressing reset starts program
+
+Program Counter: outputs address of next instruction
+* start/restart: pc = 0
+* no jump: pc++
+* goto: pc = A
+
+if reset: pc = 0
+else:
+	load = f(jump_bits, ALU_control_out)
+	if load: pc = A
+	else: pc++
