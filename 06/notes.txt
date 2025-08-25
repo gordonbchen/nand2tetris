@@ -1,0 +1,30 @@
+A-instruction: @21 -> (op code) 0 | 000 0000 0001 0101
+
+C-instruction: dest = comp; jump -> (op code) 1 | 11 | a | c1 c2 c3 c4 c5 c6 | d1 d2 d3 | j1 j2 j3
+* comp always uses D, a = 0: use A, a = 1 use M
+* dest = ADM
+* jump = any match <=>
+
+symbols
+* R0...R15 = 0...15
+* SCREEN = 16384
+* KBD = 24576
+* SP, LCL, ARG, THIS, THAT = 0...4
+
+(label) and @label: replace with next line number (need instruction counter)
+
+@var: replace with next available memory address >= 16
+
+// strip out comments
+remove whitespace
+
+2-pass assembler: find all label declarations, then assemble
+
+Symbol table: label/var/symbols -> int
+
+1. init symbol table with pre-defined symbols
+2. 1st pass find (LABEL) declarations, store in symbol table
+3. 2nd pass: n = 16, for every instruction:
+  * @symbol: replace with val in symbol table or alloc new var n++
+  * C-instruction: replace with ranslation
+  * write to output
